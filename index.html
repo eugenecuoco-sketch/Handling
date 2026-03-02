@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Evolution: Legacy to Future State</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s ease; }
+        .custom-radio { width: 22px !important; height: 22px !important; }
+        .custom-check { width: 24px !important; height: 24px !important; }
+        .kaptest-input { border-bottom: 1px dotted #ccc; width: 100%; padding: 8px 0; outline: none; }
+        .kaptest-label { font-size: 11px; color: #999; display: block; margin-top: 10px; }
+        @media print { .no-print { display: none !important; } }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const App = () => {
+            const [activeProduct, setActiveProduct] = useState('MCAT');
+            const [shippingMethodId, setShippingMethodId] = useState('ground');
+            const [viewMode, setViewMode] = useState('alphaSplit'); // 'kaptest', 'alphaCombined', 'alphaSplit'
+            const [agreed, setAgreed] = useState(true);
+
+            const productData = {
+                'MCAT': {
+                    brand: 'kaplan', bannerColor: 'bg-[#C7A8FF]', promo: 'Save 15%, use code MCAT15', phone: '1-800-KAP-TEST',
+                    kaptestItems: [
+                        { name: "MCAT Live Online Course (9 months)", price: 3099.00 },
+                        { name: "Printed Book(s)", price: 59.00 }
+                    ],
+                    alphaItems: [
+                        { name: "MCAT Live Online Course - 9 Months", qty: 1, price: 3099.00 },
+                        { name: "Add-On: MCAT Home Study Kit", qty: 1, price: 59.00 }
+                    ],
+                    alphaTax: 282.99, kaptestTax: 0,
+                    alphaShipping: { ground: 30.63, secondDay: 52.45, nextSaver: 72.52, nextDay: 81.31 }
+                },
+                'LSAT': {
+                    brand: 'kaplan', bannerColor: 'bg-[#C7A8FF]', promo: 'Save 15%, use code REG15', phone: '1-800-KAP-TEST',
+                    kaptestItems: [
+                        { name: "LSAT Live Online Course - 6 Month", price: 1499.00 },
+                        { name: "LSAC LawHub Advantage Subscription Receipt", price: 120.00 },
+                        { name: "Printed Book(s)", price: 99.00 }
+                    ],
+                    alphaItems: [
+                        { name: "LSAT Live Online Course - 6 Month", qty: 1, price: 1499.00 },
+                        { name: "Add-On: Physical LSAT Live Student Kit", qty: 1, price: 99.00 }
+                    ],
+                    alphaTax: 11.14, kaptestTax: 0,
+                    alphaShipping: { ground: 26.49, secondDay: 37.41, nextSaver: 51.49, nextDay: 56.98 }
+                },
+                'USMLE': {
+                    brand: 'kaplan', bannerColor: 'bg-[#C7A8FF]', promo: 'Save 15%, use code REG15', phone: '1-800-KAP-TEST',
+                    kaptestItems: [
+                        { name: "Step 1 Prep On Demand - 6 Month", price: 1999.00 },
+                        { name: "Printed Book(s)", price: 149.00 }
+                    ],
+                    alphaItems: [
+                        { name: "USMLE Step 1 On Demand Prep - 6 Months", qty: 1, price: 1999.00 },
+                        { name: "Add-On: USMLE Step 1 Lecture Notes: 7-Book Review", qty: 1, price: 149.00 }
+                    ],
+                    alphaTax: 193.15, kaptestTax: 0,
+                    alphaShipping: { ground: 28.38, secondDay: 46.55, nextSaver: 64.11, nextDay: 71.49 }
+                },
+                'SAT': {
+                    brand: 'kaplan', bannerColor: 'bg-white border-b', promo: '', phone: '1-800-KAP-TEST',
+                    kaptestItems: [
+                        { name: "Premier Tutoring Digital SAT (10 hours)", price: 1999.00 }
+                    ],
+                    alphaItems: [
+                        { name: "Premium Tutoring Digital SAT (10 hours)", qty: 1, price: 2999.00 }
+                    ],
+                    alphaTax: 0.00, kaptestTax: 0,
+                    alphaShipping: { ground: 18.54, secondDay: 23.28, nextSaver: 33.83, nextDay: 37.26 }
+                },
+                'GMAT': {
+                    brand: 'manhattan', bannerColor: 'bg-[#FFFF00]', promo: 'Save $250, use code GMAT250', phone: '1-800-576-4628',
+                    kaptestItems: [
+                        { name: "GMAT Live Online Course", price: 1799.00 },
+                        { name: "Printed Book(s)", price: 49.00 }
+                    ],
+                    alphaItems: [
+                        { name: "GMAT Live Online Course", qty: 1, price: 1799.00 },
+                        { name: "Add-On: GMAT Live Course Physical Bundle Sep2025", qty: 1, price: 49.00 }
+                    ],
+                    alphaTax: 6.81, kaptestTax: 0,
+                    alphaShipping: { ground: 27.74, secondDay: 40.94, nextSaver: 56.55, nextDay: 62.80 }
+                }
+            };
+
+            const data = productData[activeProduct];
+            
+            // Logic for Layout Switching
+            if (viewMode === 'kaptest') {
+                const subtotal = data.kaptestItems.reduce((acc, i) => acc + i.price, 0);
+                const total = subtotal + 20.00; // Flat $20 shipping in legacy images
+
+                return (
+                    <div className="min-h-screen bg-white">
+                        <Controls activeProduct={activeProduct} setActiveProduct={setActiveProduct} viewMode={viewMode} setViewMode={setViewMode} productData={productData} />
+                        
+                        <header className="px-10 py-4 flex justify-between items-center border-b">
+                            {data.brand === 'kaplan' ? (
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Kaplan_Inc_Logo.svg" className="h-8" />
+                            ) : (
+                                <div className="flex items-center gap-2">
+                                    <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white font-black">M</div>
+                                    <div className="font-black text-sm uppercase tracking-tighter">Manhattan Prep</div>
+                                </div>
+                            )}
+                            <div className="text-xs font-bold text-slate-700">{data.phone}</div>
+                        </header>
+
+                        {data.promo && (
+                            <div className={`${data.bannerColor} py-2 text-center text-[13px] font-bold tracking-tight`}>
+                                {data.promo}
+                            </div>
+                        )}
+
+                        <main className="max-w-[1200px] mx-auto py-12 px-10 grid grid-cols-1 lg:grid-cols-3 gap-16">
+                            <div className="lg:col-span-2 space-y-12">
+                                <section>
+                                    <h2 className="text-[20px] font-bold uppercase tracking-tight mb-8">Account Information</h2>
+                                    <div className="space-y-6">
+                                        <div className="text-[14px]">Hi there, Eugene</div>
+                                        <div>
+                                            <label className="kaptest-label">Email</label>
+                                            <div className="kaptest-input">eugene.cuoco@gmail.com</div>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-8">
+                                            <div>
+                                                <label className="kaptest-label">First Name</label>
+                                                <div className="kaptest-input">Eugene</div>
+                                            </div>
+                                            <div>
+                                                <label className="kaptest-label">Last Name</label>
+                                                <div className="kaptest-input">Cuoco</div>
+                                            </div>
+                                        </div>
+                                        <div className="pt-8 font-bold text-[14px]">Where should we send your study materials?</div>
+                                        <div className="grid grid-cols-2 gap-8">
+                                            <div>
+                                                <label className="kaptest-label">Address</label>
+                                                <div className="kaptest-input border-slate-300"></div>
+                                            </div>
+                                            <div>
+                                                <label className="kaptest-label">Apt. / Suite (optional)</label>
+                                                <div className="kaptest-input border-slate-300"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section>
+                                    <h2 className="text-[20px] font-bold uppercase tracking-tight mb-4">Additional Information</h2>
+                                    <div className="text-[13px] text-slate-500 mb-6">This will help us personalize your prep</div>
+                                    <div className="h-40 border border-dotted border-slate-200 rounded flex items-center justify-center text-xs italic text-slate-400">
+                                        Form continues based on product selection...
+                                    </div>
+                                </section>
+                            </div>
+
+                            <aside className="lg:col-span-1">
+                                <div className="border border-slate-200 rounded p-8">
+                                    <h2 className="text-[20px] font-bold uppercase tracking-tight mb-8">Order Summary</h2>
+                                    <div className="space-y-6 mb-8">
+                                        {data.kaptestItems.map((item, idx) => (
+                                            <div key={idx} className="flex justify-between items-start text-[13px]">
+                                                <div className="flex gap-3">
+                                                    <div className="w-5 h-5 rounded-full bg-cyan-500 flex items-center justify-center text-white font-bold text-[16px]">-</div>
+                                                    <span className="max-w-[150px] leading-tight font-medium">{item.name}</span>
+                                                </div>
+                                                <span className="font-medium">${item.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="border-t pt-6 space-y-3">
+                                        <div className="flex justify-between text-[13px]">
+                                            <span className="text-slate-500 italic">Apply Promo</span>
+                                            <button className="px-6 py-1 border border-indigo-600 rounded text-indigo-600 font-bold text-xs">Apply</button>
+                                        </div>
+                                        <div className="flex justify-between text-[13px] pt-4">
+                                            <span className="text-slate-600">Printed Book(s)</span>
+                                            <span>${data.kaptestItems.find(i => i.name.includes("Book"))?.price.toFixed(2) || '0.00'}</span>
+                                        </div>
+                                        <div className="flex justify-between text-[13px]">
+                                            <span className="text-slate-600">Shipping</span>
+                                            <span>$20.00</span>
+                                        </div>
+                                        <div className="flex justify-between pt-4 border-t border-slate-800 font-bold text-[14px]">
+                                            <span>TOTAL</span>
+                                            <span>${total.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </aside>
+                        </main>
+                    </div>
+                );
+            }
+
+            // Alpha Layout (Combined or Split)
+            const subtotal = data.alphaItems.reduce((acc, i) => acc + i.price, 0);
+            const shippingOptions = [
+                { id: 'ground', label: 'Ground', total: data.alphaShipping.ground, handling: 11.37 },
+                { id: '2day', label: '2nd Day Air', total: data.alphaShipping.secondDay, handling: 17.49 },
+                { id: 'nextsaver', label: 'Next Day Air Saver', total: data.alphaShipping.nextSaver, handling: 17.49 },
+                { id: 'nextday', label: 'Next Day Air', total: data.alphaShipping.nextDay, handling: 17.49 }
+            ];
+            const currentShip = shippingOptions.find(o => o.id === shippingMethodId);
+            const finalTotal = subtotal + currentShip.total + data.alphaTax;
+
+            return (
+                <div className="min-h-screen py-8">
+                    <Controls activeProduct={activeProduct} setActiveProduct={setActiveProduct} viewMode={viewMode} setViewMode={setViewMode} productData={productData} />
+                    
+                    <div className="max-w-[1600px] mx-auto bg-gray-50 p-12 rounded-2xl shadow-sm border border-gray-200">
+                        <div className="flex justify-between items-center mb-10">
+                            <h1 className="text-[27px] font-bold text-slate-900">Checkout</h1>
+                            <div className="px-4 py-1 rounded bg-indigo-50 border border-indigo-100">
+                                <span className="text-[11px] font-bold text-indigo-700 uppercase tracking-widest">
+                                    {viewMode === 'alphaCombined' ? 'Alpha: Transition State' : 'Alpha: Proposed Future State'}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+                            {/* Left Col */}
+                            <div className="space-y-12">
+                                <section>
+                                    <h2 className="text-[18px] font-semibold mb-5 text-slate-800">Shipping Address</h2>
+                                    <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-8">
+                                        <div className="text-slate-600 text-[13.5px] leading-relaxed">
+                                            <p className="font-bold text-slate-900 text-[15px] mb-1">Eugene Cuoco</p>
+                                            <p>9101 Shore Rd</p>
+                                            <p>Apt 203</p>
+                                            <p>Brooklyn, NY, 11209-6169</p>
+                                            <p>United States</p>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <section>
+                                    <div className="flex justify-between items-end mb-5">
+                                        <h2 className="text-[18px] font-semibold text-slate-800">Shipping Method</h2>
+                                        <span className="text-indigo-700 underline font-medium text-[13.5px]">Shipping Policy</span>
+                                    </div>
+                                    <div className="bg-white border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-100">
+                                        {shippingOptions.map(opt => (
+                                            <label key={opt.id} className={`flex items-start p-8 cursor-pointer transition-colors ${shippingMethodId === opt.id ? 'bg-indigo-50/40' : 'hover:bg-gray-50'}`}>
+                                                <div className="pt-1">
+                                                    <div className={`custom-radio rounded-full border-2 flex items-center justify-center ${shippingMethodId === opt.id ? 'border-indigo-700' : 'border-gray-300'}`}>
+                                                        {shippingMethodId === opt.id && <div className="w-3 h-3 rounded-full bg-indigo-700" />}
+                                                    </div>
+                                                </div>
+                                                <div className="ml-6 flex-grow">
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-[15.5px] font-bold">{opt.label}</span>
+                                                        <span className="text-[15.5px] font-bold text-slate-900">
+                                                            ${viewMode === 'alphaSplit' ? (opt.total - opt.handling).toFixed(2) : opt.total.toFixed(2)}
+                                                        </span>
+                                                    </div>
+                                                    {viewMode === 'alphaSplit' && (
+                                                        <div className="flex justify-between text-[12.5px] text-slate-500 mt-1">
+                                                            <span>Handling Fee</span>
+                                                            <span>${opt.handling.toFixed(2)}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <input type="radio" className="hidden" name="ships" checked={shippingMethodId === opt.id} onChange={() => setShippingMethodId(opt.id)} />
+                                            </label>
+                                        ))}
+                                    </div>
+                                </section>
+                            </div>
+
+                            {/* Right Col */}
+                            <div className="space-y-8">
+                                <div className="bg-white border border-gray-200 rounded-xl shadow-md p-10">
+                                    <div className="flex justify-between items-center mb-10 border-b pb-6">
+                                        <h2 className="text-[22.5px] font-bold text-slate-800">Order Summary</h2>
+                                        <div className="flex gap-12 text-[8.5px] font-black text-slate-400 uppercase tracking-widest mr-2">
+                                            <span>Quantity</span>
+                                            <span>Unit Price</span>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-8 mb-12">
+                                        {data.alphaItems.map((item, idx) => (
+                                            <div key={idx} className="flex justify-between items-center">
+                                                <p className="font-bold text-slate-900 text-[15px]">{item.name}</p>
+                                                <div className="flex gap-16 text-[13.5px] font-medium text-slate-600">
+                                                    <span className="w-8 text-center">{item.qty}</span>
+                                                    <span className="w-24 text-right">${item.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="space-y-5 text-[14px] font-medium bg-slate-50 p-8 rounded-xl border border-slate-100">
+                                        <div className="flex justify-between text-slate-500">
+                                            <span>Subtotal:</span>
+                                            <span className="text-slate-900 font-bold">${subtotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                                        </div>
+                                        {viewMode === 'alphaCombined' ? (
+                                            <div className="flex justify-between text-slate-500">
+                                                <span>Shipping:</span>
+                                                <span className="text-slate-900 font-bold">${currentShip.total.toFixed(2)}</span>
+                                            </div>
+                                        ) : (
+                                            <React.Fragment>
+                                                <div className="flex justify-between text-slate-500">
+                                                    <span>Shipping:</span>
+                                                    <span className="text-slate-900 font-bold">${(currentShip.total - currentShip.handling).toFixed(2)}</span>
+                                                </div>
+                                                <div className="flex justify-between text-slate-500">
+                                                    <span>Handling:</span>
+                                                    <span className="text-slate-900 font-bold">${currentShip.handling.toFixed(2)}</span>
+                                                </div>
+                                            </React.Fragment>
+                                        )}
+                                        <div className="flex justify-between text-slate-500 pb-4 border-b">
+                                            <span>Estimated Tax:</span>
+                                            <span className="text-slate-900 font-bold">${data.alphaTax.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                                        </div>
+                                        <div className="flex justify-between pt-5">
+                                            <span className="text-[23.5px] font-black uppercase">Total:</span>
+                                            <span className="text-[23.5px] font-black">${finalTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="space-y-8 px-2">
+                                    <label className="flex items-start gap-5 cursor-pointer">
+                                        <div className={`custom-check mt-0.5 flex-shrink-0 rounded border-2 flex items-center justify-center ${agreed ? 'bg-indigo-900 border-indigo-900' : 'bg-white border-gray-300'}`}>
+                                            {agreed && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
+                                        </div>
+                                        <span className="text-[14px] text-slate-600">I agree to the <span className="text-indigo-700 font-bold underline">Terms of Use</span> and the <span className="text-indigo-700 font-bold underline">Privacy Policy</span>.</span>
+                                        <input type="checkbox" className="hidden" checked={agreed} onChange={() => setAgreed(!agreed)} />
+                                    </label>
+                                    <button className="w-full py-5 rounded-full font-bold text-[19px] bg-slate-200 text-slate-500 opacity-60">Place Order</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const Controls = ({ activeProduct, setActiveProduct, viewMode, setViewMode, productData }) => (
+            <div className="max-w-[1600px] mx-auto mb-10 space-y-4 no-print px-4">
+                <div className="flex flex-wrap items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest mr-2">Step 1: Select Product</span>
+                    <div className="flex gap-2">
+                        {Object.keys(productData).map(prod => (
+                            <button key={prod} onClick={() => setActiveProduct(prod)} className={`px-5 py-2 rounded-lg font-bold transition-all text-xs ${activeProduct === prod ? 'bg-indigo-900 text-white shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                                {prod}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="h-8 w-px bg-slate-200 mx-4"></div>
+                    <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest mr-2">Step 2: Choose State</span>
+                    <div className="flex bg-slate-100 p-1 rounded-lg">
+                        {[
+                            { id: 'kaptest', label: 'Kaptest (Legacy)' },
+                            { id: 'alphaCombined', label: 'Alpha (Combined)' },
+                            { id: 'alphaSplit', label: 'Alpha (Split S&H)' }
+                        ].map(m => (
+                            <button key={m.id} onClick={() => setViewMode(m.id)} className={`px-6 py-2 rounded-md font-bold text-[10px] uppercase transition-all ${viewMode === m.id ? 'bg-white text-indigo-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
+                                {m.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
