@@ -27,8 +27,10 @@
         const App = () => {
             const [activeProduct, setActiveProduct] = useState('MCAT');
             const [shippingMethodId, setShippingMethodId] = useState('ground');
-            const [viewMode, setViewMode] = useState('alphaSplit'); // 'kaptest', 'alphaCombined', 'alphaSplit'
+            const [viewMode, setViewMode] = useState('alphaSplit'); // 'kaptest', 'alphaCombined', 'alphaSplit', 'competitor'
             const [agreed, setAgreed] = useState(true);
+            const [tprPaymentMode, setTprPaymentMode] = useState('full');
+            const [satShipping, setSatShipping] = useState(22.09);
 
             const productData = {
                 'MCAT': {
@@ -110,7 +112,7 @@
                         
                         <header className="px-10 py-4 flex justify-between items-center border-b">
                             {data.brand === 'kaplan' ? (
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Kaplan_Inc_Logo.svg" className="h-8" />
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Kaplan_Inc_Logo.svg" className="h-8" alt="Kaplan Logo" />
                             ) : (
                                 <div className="flex items-center gap-2">
                                     <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white font-black">M</div>
@@ -203,6 +205,681 @@
                                 </div>
                             </aside>
                         </main>
+                    </div>
+                );
+            }
+
+            // Competitor Layouts
+            if (viewMode === 'competitor') {
+                if (activeProduct === 'MCAT') {
+                    return (
+                        <div className="min-h-screen bg-white font-sans text-gray-800 pb-20">
+                            <Controls activeProduct={activeProduct} setActiveProduct={setActiveProduct} viewMode={viewMode} setViewMode={setViewMode} productData={productData} />
+                            
+                            {/* TPR Header Mock */}
+                            <header className="flex justify-between items-center py-4 px-8 border-b border-gray-200 text-[14px] font-medium max-w-[1600px] mx-auto">
+                                <div className="flex items-center gap-8">
+                                    <div className="w-24 border-l-4 border-[#FFD520] pl-2 font-black leading-tight text-lg tracking-tighter uppercase">
+                                        The<br/>Princeton<br/>Review
+                                    </div>
+                                    <nav className="hidden lg:flex gap-6 text-gray-900 font-bold text-[13px]">
+                                        <a href="#" className="hover:text-blue-600">Pre-High School</a>
+                                        <a href="#" className="hover:text-blue-600">Pre-College</a>
+                                        <a href="#" className="hover:text-blue-600">Pre-Med</a>
+                                        <a href="#" className="hover:text-blue-600">Pre-Law</a>
+                                        <a href="#" className="hover:text-blue-600">Pre-Grad</a>
+                                        <a href="#" className="hover:text-blue-600">Pre-Business</a>
+                                    </nav>
+                                </div>
+                                <div className="flex items-center gap-6">
+                                    <div className="flex items-center gap-1 relative cursor-pointer">
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                        <span className="absolute -top-1.5 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">1</span>
+                                    </div>
+                                    <svg className="w-5 h-5 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                    <a href="#" className="text-gray-600 hover:text-gray-900">Sign In</a>
+                                    <button className="bg-[#E6006F] hover:bg-[#c90060] text-white px-6 py-2 rounded font-bold transition-colors">Sign Up</button>
+                                </div>
+                            </header>
+
+                            {/* Main Content */}
+                            <main className="max-w-[1200px] mx-auto py-12 px-6">
+                                <h1 className="text-[32px] font-bold mb-8 flex items-baseline gap-2">
+                                    Cart <span className="text-[18px] font-medium text-gray-500">(1 item)</span>
+                                </h1>
+                                
+                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                                    {/* Left Column */}
+                                    <div className="lg:col-span-2">
+                                        <div className="border border-gray-200 rounded-2xl p-8 shadow-sm">
+                                            <div className="flex justify-between items-start mb-8">
+                                                <h2 className="text-[18px] font-bold uppercase tracking-wide text-gray-900">MCAT 515+ LIVEONLINE</h2>
+                                                <div className="text-right">
+                                                    <div className="text-[22px] font-bold text-gray-900">$2,899.00</div>
+                                                    <div className="text-gray-400 line-through text-[15px] font-medium">$3,499.00</div>
+                                                    <div className="text-gray-500 text-[13px] font-medium mt-1">Promo: LASTCALL600</div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="space-y-1 mb-8 text-[14px] text-gray-700 font-medium">
+                                                <div className="font-bold text-gray-900">04/04/26 - 07/05/26</div>
+                                                <div>Online Classroom</div>
+                                                <div className="text-gray-500">Course 561386</div>
+                                            </div>
+                                            
+                                            <div className="mb-10">
+                                                <div className="font-bold text-[14px] text-gray-900 mb-3">Includes:</div>
+                                                <ul className="space-y-2.5 text-[12px] font-bold text-gray-500 uppercase tracking-widest">
+                                                    {['MCAT OPTIONAL TOPIC FOCUS SESSIONS', 'MCAT TOPIC FOCUS', 'MEDICAL SCHOOL ADMISSIONS ADVANTAGE'].map((inc, i) => (
+                                                        <li key={i} className="flex items-center gap-3">
+                                                            <div className="w-4 h-4 rounded-full bg-[#e8f5ed] flex items-center justify-center text-[#00a870]">
+                                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                                                            </div>
+                                                            {inc}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                            
+                                            <div className="space-y-4">
+                                                <label className={`block border ${tprPaymentMode === 'full' ? 'border-gray-800 bg-white' : 'border-gray-200 bg-white'} rounded-xl p-5 cursor-pointer flex items-start gap-4 transition-all shadow-sm`}>
+                                                    <input type="radio" name="tprPay" className="mt-1 w-4 h-4 accent-gray-900" checked={tprPaymentMode === 'full'} onChange={() => setTprPaymentMode('full')} />
+                                                    <div>
+                                                        <div className="font-bold text-gray-900 text-[15px]">Pay in full: $2,899.00</div>
+                                                        <div className="text-[13px] text-gray-600 mt-1 flex items-center gap-1.5">
+                                                            <span className="bg-[#e6e2f5] text-[#4a2e83] text-[10px] px-1.5 py-0.5 rounded-sm font-bold">0% APR</span>
+                                                            or as low as $242/mo with <span className="font-bold text-gray-900">affirm</span>
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                                
+                                                <label className={`block border ${tprPaymentMode === 'deposit' ? 'border-gray-800 bg-white' : 'border-gray-200 bg-white'} rounded-xl p-5 cursor-pointer flex items-start gap-4 transition-all shadow-sm`}>
+                                                    <input type="radio" name="tprPay" className="mt-1 w-4 h-4 accent-gray-900" checked={tprPaymentMode === 'deposit'} onChange={() => setTprPaymentMode('deposit')} />
+                                                    <div>
+                                                        <div className="font-bold text-gray-900 text-[15px]">Pay Deposit: $499.00</div>
+                                                        <div className="text-[13px] text-gray-500 mt-1">Remaining balance charged 10 days prior to course start date.</div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Right Column */}
+                                    <div className="lg:col-span-1">
+                                        <div className="border border-gray-200 rounded-2xl p-8 shadow-sm">
+                                            <h2 className="text-[18px] font-medium text-gray-800 mb-6">Order Summary</h2>
+                                            
+                                            <div className="space-y-4 text-[14.5px] border-b border-gray-200 pb-6 mb-6">
+                                                <div className="flex justify-between text-gray-600">
+                                                    <span>Subtotal</span>
+                                                    <span className="font-medium text-gray-900">$3,499.00</span>
+                                                </div>
+                                                <div className="flex justify-between text-[#00a870] font-bold">
+                                                    <span>Savings</span>
+                                                    <span>-$600.00</span>
+                                                </div>
+                                                <div className="flex justify-between text-gray-600">
+                                                    <span>Shipping</span>
+                                                    <span className="font-medium text-gray-900">$45.99</span>
+                                                </div>
+                                                <div className="flex justify-between text-gray-600">
+                                                    <span>Estimated Tax</span>
+                                                    <span className="font-medium text-gray-900">TBD</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="flex justify-between items-center text-[15px] font-bold text-gray-800 border-b border-gray-200 pb-6 mb-6 cursor-pointer">
+                                                <span>Have a promo code?</span>
+                                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                            </div>
+                                            
+                                            <div className="flex justify-between items-end mb-8">
+                                                <span className="text-[16px] font-bold text-gray-900">Estimated Total</span>
+                                                <span className="text-[22px] font-bold text-gray-900">$2,944.99 USD</span>
+                                            </div>
+                                            
+                                            <button className="w-full bg-[#00a870] hover:bg-[#008f5f] text-white py-3.5 rounded-full font-bold text-[16px] flex justify-center items-center gap-2 transition-colors">
+                                                Go to checkout 
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7"></path></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </main>
+                        </div>
+                    );
+                }
+
+                if (activeProduct === 'LSAT') {
+                    return (
+                        <div className="min-h-screen bg-white font-sans text-[#333333] pb-20">
+                            <Controls activeProduct={activeProduct} setActiveProduct={setActiveProduct} viewMode={viewMode} setViewMode={setViewMode} productData={productData} />
+                            
+                            {/* Blueprint Header Mock */}
+                            <header className="flex justify-between items-center py-4 px-10 border-b border-gray-200 max-w-[1400px] mx-auto">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-9 h-9 border border-blue-200 flex items-center justify-center bg-[#f4f7fb]">
+                                        <div className="w-5 h-5 border border-blue-300 flex items-center justify-center">
+                                            <div className="w-2 h-2 bg-blue-200"></div>
+                                        </div>
+                                    </div>
+                                    <span className="text-[28px] tracking-tight text-[#6d88b3] font-light">blueprint</span>
+                                </div>
+                                <svg className="w-6 h-6 text-gray-700 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            </header>
+
+                            {/* Blueprint Main Content */}
+                            <main className="max-w-[1100px] mx-auto py-12 px-6 flex flex-col lg:flex-row gap-20">
+                                {/* Left Column */}
+                                <div className="flex-1 space-y-10">
+                                    {/* Payment Radios */}
+                                    <div className="space-y-4 border-b border-gray-200 pb-8">
+                                        <label className="flex items-center gap-3 cursor-pointer">
+                                            <input type="radio" name="bpPay" className="w-4 h-4 accent-blue-600" />
+                                            <span className="text-[14px] flex items-center gap-2"><span className="font-bold text-[#000000]">affirm</span> Monthly Payments</span>
+                                        </label>
+                                        <label className="flex items-center gap-3 cursor-pointer">
+                                            <input type="radio" name="bpPay" defaultChecked className="w-4 h-4 accent-blue-600" />
+                                            <span className="text-[14px]">Credit Card</span>
+                                        </label>
+                                    </div>
+                                    
+                                    {/* Billing Address */}
+                                    <div>
+                                        <h2 className="text-[22px] font-normal mb-6">Billing Address</h2>
+                                        <div className="flex justify-between items-end mb-4">
+                                            <span className="font-bold text-[14px]">Saved Address</span>
+                                            <a href="#" className="text-[#24518c] font-bold text-[13px] hover:underline">Edit</a>
+                                        </div>
+                                        <div className="text-[14px] text-gray-700 leading-relaxed">
+                                            mimi mimi<br/>
+                                            15 West Lake Boulevard<br/>
+                                            Morristown, New Jersey 07960<br/>
+                                            United States
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Payment Options */}
+                                    <div className="pt-2">
+                                        <h2 className="text-[22px] font-normal mb-6">Payment Options</h2>
+                                        <div className="border border-gray-200 rounded-lg p-5 shadow-sm">
+                                            <div className="flex justify-between items-center mb-6">
+                                                <div className="font-black text-[16px] italic tracking-tight text-[#002f24] flex items-center gap-1">
+                                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd"></path></svg>
+                                                    link
+                                                </div>
+                                                <div className="flex items-center gap-4 text-[13px] text-gray-500">
+                                                    <span>rox******@gmail.com <span className="ml-1 text-[10px]">&#9660;</span></span>
+                                                    <span className="cursor-pointer font-medium text-lg">&times;</span>
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <button className="border border-green-700 rounded-md text-center py-2.5 font-bold text-[14px] flex justify-center items-center gap-2 hover:bg-green-50">
+                                                    Use <span className="bg-[#1a1f71] text-white px-1.5 py-0.5 text-[10px] rounded-sm font-black italic">VISA</span> **** 6802
+                                                </button>
+                                                <button className="border border-gray-200 rounded-md text-center py-2.5 font-bold text-[14px] hover:bg-gray-50 text-gray-700">
+                                                    Pay another way
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button className="bg-[#24518c] hover:bg-[#1a3d6b] text-white font-bold py-3.5 px-8 rounded-full text-[13px] uppercase tracking-wider mt-4 transition-colors">
+                                        Complete Purchase
+                                    </button>
+                                </div>
+                                
+                                {/* Right Column */}
+                                <div className="w-full lg:w-[420px] lg:border-l border-gray-100 lg:pl-12">
+                                    <h2 className="text-[22px] font-normal mb-8">Order Summary</h2>
+                                    
+                                    <div className="space-y-6 border-b border-gray-200 pb-8 mb-6">
+                                        <div className="flex justify-between items-start">
+                                            <div className="flex gap-4">
+                                                <div className="w-12 h-10 bg-gray-100 border border-gray-200 flex items-center justify-center text-[8px] text-gray-400">IMG</div>
+                                                <div>
+                                                    <div className="font-bold text-[14px]">Live Course</div>
+                                                    <div className="text-[12px] text-gray-500 mt-1">Qty: 1</div>
+                                                </div>
+                                            </div>
+                                            <div className="text-[14px] font-medium">$1,299</div>
+                                        </div>
+                                        <div className="flex justify-between items-start">
+                                            <div className="flex gap-4">
+                                                <div className="w-12 h-10 bg-blue-50 flex items-center justify-center border border-blue-100 rounded text-blue-800 text-[10px] font-bold">SAC</div>
+                                                <div>
+                                                    <div className="font-bold text-[14px]">LSAC LawHub Advantage - 12 months</div>
+                                                    <div className="text-[12px] text-gray-500 mt-1">Qty: 1</div>
+                                                </div>
+                                            </div>
+                                            <div className="text-[14px] font-medium">$120</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="flex justify-between text-[14px] mb-6">
+                                        <span className="text-gray-600">Subtotal</span>
+                                        <span className="font-medium">$1,419</span>
+                                    </div>
+                                    
+                                    <a href="#" className="text-[#24518c] text-[13px] font-bold underline mb-8 inline-block hover:text-blue-800">Enter promo code</a>
+                                    
+                                    <div className="flex justify-between items-center mt-2 pt-8">
+                                        <span className="text-[20px] font-bold">Order Total</span>
+                                        <span className="text-[22px] font-bold">$1,419</span>
+                                    </div>
+                                </div>
+                            </main>
+                        </div>
+                    );
+                }
+
+                if (activeProduct === 'GMAT') {
+                    return (
+                        <div className="min-h-screen bg-white font-sans text-gray-800 pb-20">
+                            <Controls activeProduct={activeProduct} setActiveProduct={setActiveProduct} viewMode={viewMode} setViewMode={setViewMode} productData={productData} />
+                            
+                            {/* TPR Checkout Header Mock */}
+                            <header className="py-6 px-10 border-b border-gray-100 max-w-[1400px] mx-auto">
+                                <div className="inline-block relative">
+                                    <div className="bg-[#000000] text-white px-3 py-2 font-black leading-tight text-[19px] tracking-tighter uppercase relative z-10">
+                                        The<br/>Princeton<br/>Review
+                                        <div className="text-[8px] absolute top-1.5 right-1">&reg;</div>
+                                    </div>
+                                    <div className="absolute -bottom-1.5 -right-1.5 w-full h-full border-b-4 border-r-4 border-[#FFD520] z-0"></div>
+                                </div>
+                            </header>
+
+                            {/* Main Content */}
+                            <main className="max-w-[1100px] mx-auto py-12 px-6">
+                                <h1 className="text-[36px] font-bold mb-12">Checkout</h1>
+                                
+                                <div className="flex flex-col lg:flex-row gap-16">
+                                    {/* Left Column */}
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-4 mb-8">
+                                            <div className="w-8 h-8 rounded-full bg-[#FFD520] flex items-center justify-center font-bold text-black text-[16px]">1</div>
+                                            <h2 className="text-[22px] font-bold">Create an Account</h2>
+                                        </div>
+                                        
+                                        <p className="text-[14px] font-medium text-gray-800 mb-6">Tell us about yourself</p>
+                                        
+                                        <form className="space-y-5">
+                                            <div className="flex gap-5">
+                                                <input type="text" placeholder="Your first name" className="flex-1 border border-gray-300 rounded-[20px] px-5 py-3.5 text-[15px] outline-none focus:border-gray-500 placeholder:text-gray-400" />
+                                                <input type="text" placeholder="Your last name" className="flex-1 border border-gray-300 rounded-[20px] px-5 py-3.5 text-[15px] outline-none focus:border-gray-500 placeholder:text-gray-400" />
+                                            </div>
+                                            <input type="tel" placeholder="Phone Number" className="w-full border border-gray-300 rounded-[20px] px-5 py-3.5 text-[15px] outline-none focus:border-gray-500 placeholder:text-gray-400" />
+                                            <input type="email" placeholder="Your email address" className="w-full border border-gray-300 rounded-[20px] px-5 py-3.5 text-[15px] outline-none focus:border-gray-500 placeholder:text-gray-400" />
+                                            <div className="relative">
+                                                <input type="password" placeholder="Password" className="w-full border border-gray-300 rounded-[20px] px-5 py-3.5 text-[15px] outline-none focus:border-gray-500 placeholder:text-gray-400" />
+                                                <svg className="w-5 h-5 absolute right-5 top-4 text-gray-600 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                            </div>
+                                            
+                                            <div className="flex items-start gap-3 pt-2">
+                                                <input type="checkbox" className="mt-1 w-[18px] h-[18px] border-gray-300 rounded-sm" />
+                                                <label className="text-[13px] text-gray-700 leading-tight">
+                                                    Opt in to the latest offers, updates, advice, and other marketing messages by text
+                                                </label>
+                                            </div>
+                                            <p className="text-[11.5px] text-gray-500 leading-relaxed pt-2">
+                                                By checking this box, you consent to receive marketing messages, including autodialed texts, from TPR Education, LLC d/b/a The Princeton Review at the phone number entered above, and you agree to <a href="#" className="underline">SMS/MMS Marketing Terms & Conditions</a> and <a href="#" className="underline">privacy policy</a>. Opt out at any time. Reply "STOP" to stop or "HELP" for help. Message frequency will vary. Consent is not a condition of purchase.
+                                            </p>
+                                        </form>
+                                    </div>
+                                    
+                                    {/* Right Column */}
+                                    <div className="w-full lg:w-[380px]">
+                                        <div className="border border-gray-200 rounded-2xl p-8 shadow-[0_4px_16px_rgba(0,0,0,0.04)]">
+                                            <h2 className="text-[18px] font-medium text-gray-800 mb-6">Order Summary</h2>
+                                            
+                                            <div className="flex justify-between items-center border-b border-gray-200 pb-5 mb-5 cursor-pointer">
+                                                <div className="flex items-center gap-3 font-medium text-[15px] text-gray-800">
+                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                                    Cart (1 Item)
+                                                </div>
+                                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                            </div>
+                                            
+                                            <div className="space-y-4 text-[14px] border-b border-gray-200 pb-6 mb-6">
+                                                <div className="flex justify-between text-gray-600">
+                                                    <span>Subtotal</span>
+                                                    <span className="font-medium text-gray-900">$1,999.00</span>
+                                                </div>
+                                                <div className="flex justify-between text-[#00a870] font-bold">
+                                                    <span>Savings</span>
+                                                    <span>-$400.00</span>
+                                                </div>
+                                                <div className="flex justify-between text-gray-600">
+                                                    <span>Shipping</span>
+                                                    <span className="font-medium text-gray-900">Free</span>
+                                                </div>
+                                                <div className="flex justify-between text-gray-600">
+                                                    <span>Sales Tax</span>
+                                                    <span className="font-medium text-gray-900">$0.00</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="flex justify-between items-center text-[14.5px] font-bold text-gray-800 border-b border-gray-200 pb-6 mb-8 cursor-pointer">
+                                                <span>Have a promo code?</span>
+                                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                            </div>
+                                            
+                                            <div className="flex justify-between items-end mb-8">
+                                                <span className="text-[16px] font-bold text-gray-900">Total</span>
+                                                <span className="text-[18px] font-bold text-gray-900">$1,599.00 USD</span>
+                                            </div>
+                                            
+                                            <button className="w-full bg-[#e8e8e8] text-[#a3a3a3] py-3.5 rounded-full font-bold text-[16px] flex justify-center items-center gap-2 mb-6 cursor-not-allowed">
+                                                Place Order <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7"></path></svg>
+                                            </button>
+                                            
+                                            <div className="text-center text-[13px] text-gray-600 font-medium">
+                                                Questions? Call <span className="font-bold">1-800-273-8439</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </main>
+                        </div>
+                    );
+                }
+
+                if (activeProduct === 'SAT') {
+                    const satBasePrice = 249;
+                    const satTax = 8.09;
+                    const satTotalBeforeTax = satBasePrice + satShipping;
+                    const satOrderTotal = satTotalBeforeTax + satTax;
+
+                    return (
+                        <div className="min-h-screen bg-white font-sans text-gray-800 pb-20">
+                            <Controls activeProduct={activeProduct} setActiveProduct={setActiveProduct} viewMode={viewMode} setViewMode={setViewMode} productData={productData} />
+                            
+                            <main className="max-w-[1000px] mx-auto py-12 px-6 grid grid-cols-1 lg:grid-cols-12 gap-16">
+                                {/* Left Column */}
+                                <div className="lg:col-span-7 space-y-10">
+                                    {/* Ship To Box */}
+                                    <div className="border border-gray-200 rounded-md p-6">
+                                        <div className="flex justify-between items-start mb-4">
+                                            <span className="text-gray-400 text-[14px]">Ship To</span>
+                                            <a href="#" className="text-[#1890ff] text-[13px] hover:underline">Edit</a>
+                                        </div>
+                                        <div className="text-[15px] text-gray-500 font-light leading-relaxed">
+                                            mimi mimi<br/>
+                                            15 w lake blvd morristown, New Jersey 07960-5073 USA
+                                        </div>
+                                    </div>
+
+                                    {/* Shipping & Discount */}
+                                    <div>
+                                        <h2 className="text-[24px] font-light text-gray-600 mb-2">Shipping & Discount</h2>
+                                        <p className="text-[13px] text-gray-400 mb-6">Please allow 5 business days for processing before textbook is shipped.</p>
+
+                                        <div className="space-y-3 mb-12">
+                                            {[
+                                                { id: 22.09, label: 'UPS Ground: $22.09' },
+                                                { id: 37.76, label: 'UPS 3 Day Select : $37.76' },
+                                                { id: 48.63, label: 'UPS 2nd Day Air: $48.63' },
+                                                { id: 137.17, label: 'UPS Next Day Air: $137.17' },
+                                                { id: 0, label: 'No Printed Books Necessary: $0' }
+                                            ].map(opt => (
+                                                <label key={opt.id} className="flex items-center gap-3 cursor-pointer text-[14px] text-gray-500">
+                                                    <input type="radio" name="satShip"
+                                                        checked={satShipping === opt.id}
+                                                        onChange={() => setSatShipping(opt.id)}
+                                                        className="w-4 h-4 accent-[#1890ff]" />
+                                                    {opt.label}
+                                                </label>
+                                            ))}
+                                        </div>
+
+                                        <div className="flex gap-4 items-start mb-2 max-w-[400px]">
+                                            <div className="flex-1">
+                                                <input type="text" placeholder="Discount Code (Optional)" className="w-full border-b border-gray-300 pb-2 text-[14px] outline-none focus:border-[#1890ff] placeholder-gray-300" />
+                                                <p className="text-[10px] text-gray-400 mt-2">(Institutional purchases only)</p>
+                                            </div>
+                                            <button className="px-6 py-1.5 border border-[#1890ff] text-[#1890ff] rounded-[20px] text-[14px] hover:bg-blue-50 transition-colors">Apply</button>
+                                        </div>
+
+                                        <div className="mt-10">
+                                            <button className="bg-[#1890ff] hover:bg-blue-500 text-white px-8 py-2.5 rounded-[20px] text-[14px] transition-colors">Save and Continue</button>
+                                            <p className="text-[11px] text-gray-400 mt-3 italic">* Please click on 'Apply' if you wish to apply any discount(s)</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Right Column */}
+                                <div className="lg:col-span-5">
+                                    <div className="bg-[#f0f0f0] rounded-md p-8 shadow-sm">
+                                        <h2 className="text-[22px] font-light text-gray-600 mb-8">Selected Plan</h2>
+                                        
+                                        <div className="flex justify-between items-start mb-10">
+                                            <div className="flex gap-3">
+                                                <div className="mt-1 w-[15px] h-[15px] rounded-full border-[4px] border-gray-500 bg-white flex-shrink-0"></div>
+                                                <div>
+                                                    <div className="text-[14px] text-gray-500 font-medium mb-1">SAT Course 30-Day Access</div>
+                                                    <div className="text-[12px] text-gray-400 mb-1">(Video + QBank + Study Guide)</div>
+                                                    <div className="text-[11px] text-gray-400">Textbook - SAT Study Guide (Print) 2026</div>
+                                                </div>
+                                            </div>
+                                            <div className="text-[14px] text-gray-600"><span className="text-[9px] align-top font-medium">$</span>249</div>
+                                        </div>
+
+                                        <h2 className="text-[22px] font-light text-gray-600 mb-6">Summary <span className="text-[16px]">(USD)</span></h2>
+                                        
+                                        <div className="space-y-4 text-[13px] text-gray-500 mb-6">
+                                            <div className="flex justify-between">
+                                                <span>Subtotal</span>
+                                                <span><span className="text-[9px] align-top">$</span>249</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>Shipping</span>
+                                                <span><span className="text-[9px] align-top">$</span>{satShipping.toFixed(2)}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="border-t border-gray-300 pt-5 space-y-3 text-[13px] text-gray-500 mb-10">
+                                            <div className="flex justify-between">
+                                                <span>Total Before Tax</span>
+                                                <span><span className="text-[9px] align-top font-medium mr-0.5">$</span>{satTotalBeforeTax.toFixed(2)}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <span className="flex items-center gap-1 text-[#1890ff] cursor-pointer">
+                                                    Estimated Tax 
+                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                </span>
+                                                <span><span className="text-[9px] align-top font-medium mr-0.5">$</span>{satTax.toFixed(2)}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex justify-between items-end mb-16">
+                                            <span className="text-[18px] text-gray-600">Order Total</span>
+                                            <span className="text-[26px] font-medium text-gray-700 leading-none">
+                                                <span className="text-[13px] align-top font-normal mr-0.5">$</span>{satOrderTotal.toFixed(2)}
+                                            </span>
+                                        </div>
+
+                                        <div className="text-center">
+                                            <a href="#" className="text-[11px] text-gray-400 hover:text-gray-600">Why am I being taxed?</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </main>
+                        </div>
+                    );
+                }
+
+                if (activeProduct === 'USMLE') {
+                    return (
+                        <div className="min-h-screen bg-white font-sans text-gray-800 pb-20">
+                            <Controls activeProduct={activeProduct} setActiveProduct={setActiveProduct} viewMode={viewMode} setViewMode={setViewMode} productData={productData} />
+                            
+                            <main className="max-w-[1000px] mx-auto py-12 px-6 grid grid-cols-1 lg:grid-cols-12 gap-16">
+                                {/* Left Column */}
+                                <div className="lg:col-span-7 space-y-12">
+                                    {/* Billing Address */}
+                                    <div>
+                                        <div className="flex justify-between items-center mb-8">
+                                            <h2 className="text-[24px] font-light text-gray-600">Billing Address</h2>
+                                            <label className="flex items-center gap-2 cursor-pointer text-[13px] text-gray-400">
+                                                <input type="checkbox" className="w-4 h-4 rounded-sm border-gray-300" />
+                                                Use Profile Info
+                                            </label>
+                                        </div>
+                                        
+                                        <form className="space-y-8">
+                                            <div className="grid grid-cols-2 gap-6">
+                                                <div className="relative">
+                                                    <label className="text-[11px] text-gray-400 absolute -top-4 left-0">First Name</label>
+                                                    <input type="text" defaultValue="mimi" className="w-full border-b border-gray-300 pb-1 text-[14px] text-gray-500 outline-none focus:border-gray-500" />
+                                                </div>
+                                                <div className="relative">
+                                                    <label className="text-[11px] text-gray-400 absolute -top-4 left-0">Last Name</label>
+                                                    <input type="text" defaultValue="mimi" className="w-full border-b border-gray-300 pb-1 text-[14px] text-gray-500 outline-none focus:border-gray-500" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="relative">
+                                                <label className="text-[11px] text-gray-400 absolute -top-4 left-0">Address</label>
+                                                <input type="text" defaultValue="15 w lake blvd" className="w-full border-b border-gray-300 pb-1 text-[14px] text-gray-500 outline-none focus:border-gray-500" />
+                                            </div>
+                                            
+                                            <div className="grid grid-cols-2 gap-6">
+                                                <div className="relative">
+                                                    <label className="text-[11px] text-gray-400 absolute -top-4 left-0">Address2</label>
+                                                    <input type="text" className="w-full border-b border-gray-300 pb-1 text-[14px] text-gray-500 outline-none focus:border-gray-500" />
+                                                </div>
+                                                <div className="relative">
+                                                    <label className="text-[11px] text-gray-400 absolute -top-4 left-0">City</label>
+                                                    <input type="text" defaultValue="morristown" className="w-full border-b border-gray-300 pb-1 text-[14px] text-gray-500 outline-none focus:border-gray-500" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="grid grid-cols-2 gap-6">
+                                                <div className="relative">
+                                                    <select className="w-full border-b border-gray-300 pb-1 text-[14px] text-gray-500 outline-none focus:border-gray-500 appearance-none bg-transparent">
+                                                        <option>USA</option>
+                                                    </select>
+                                                    <svg className="w-3 h-3 absolute right-0 top-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                                </div>
+                                                <div className="relative">
+                                                    <select className="w-full border-b border-gray-300 pb-1 text-[14px] text-gray-500 outline-none focus:border-gray-500 appearance-none bg-transparent">
+                                                        <option>New Jersey</option>
+                                                    </select>
+                                                    <svg className="w-3 h-3 absolute right-0 top-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="grid grid-cols-2 gap-6">
+                                                <div className="relative">
+                                                    <label className="text-[11px] text-gray-400 absolute -top-4 left-0">Zip code</label>
+                                                    <input type="text" defaultValue="07960" className="w-full border-b border-gray-300 pb-1 text-[14px] text-gray-500 outline-none focus:border-gray-500" />
+                                                </div>
+                                                <div className="flex gap-4">
+                                                    <div className="relative w-16">
+                                                        <select className="w-full border-b border-gray-300 pb-1 text-[14px] text-gray-500 outline-none focus:border-gray-500 appearance-none bg-transparent">
+                                                            <option>+1</option>
+                                                        </select>
+                                                        <svg className="w-3 h-3 absolute right-0 top-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                                    </div>
+                                                    <div className="relative flex-1">
+                                                        <label className="text-[11px] text-gray-400 absolute -top-4 left-0">Telephone</label>
+                                                        <input type="tel" defaultValue="9736155555" className="w-full border-b border-gray-300 pb-1 text-[14px] text-gray-500 outline-none focus:border-gray-500" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    {/* Credit Card */}
+                                    <div className="pt-4">
+                                        <div className="flex justify-between items-center mb-10">
+                                            <h2 className="text-[24px] font-light text-gray-600">Credit Card</h2>
+                                            <div className="flex gap-1.5">
+                                                <div className="w-8 h-5 bg-[#1a1f71] rounded flex items-center justify-center text-[8px] font-black text-white italic">VISA</div>
+                                                <div className="w-8 h-5 bg-gray-100 rounded flex items-center justify-center gap-0.5">
+                                                    <div className="w-3 h-3 rounded-full bg-red-500 opacity-80"></div>
+                                                    <div className="w-3 h-3 rounded-full bg-yellow-400 opacity-80 -ml-1.5"></div>
+                                                </div>
+                                                <div className="w-8 h-5 bg-[#2671B9] rounded flex items-center justify-center text-[6px] font-bold text-white text-center leading-none">AMEX</div>
+                                                <div className="w-8 h-5 bg-[#E55C20] rounded flex items-center justify-center text-[5px] font-bold text-white text-center leading-none">DISCOVER</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <form className="space-y-8">
+                                            <div className="relative">
+                                                <label className="text-[11px] text-gray-400 absolute -top-4 left-0">Card number</label>
+                                                <input type="text" defaultValue="4060 0000 7169 6933" className="w-full border-b border-red-500 pb-1 text-[14px] text-gray-500 outline-none" />
+                                            </div>
+                                            
+                                            <div className="grid grid-cols-2 gap-6">
+                                                <div className="relative">
+                                                    <label className="text-[11px] text-gray-400 absolute -top-4 left-0">Expiry (MM/YYYY)</label>
+                                                    <input type="text" defaultValue="01 / 31" className="w-full border-b border-red-500 pb-1 text-[14px] text-gray-500 outline-none" />
+                                                </div>
+                                                <div className="relative">
+                                                    <label className="text-[11px] text-gray-400 absolute -top-4 left-0">CVV2</label>
+                                                    <input type="text" defaultValue="211" className="w-full border-b border-red-500 pb-1 text-[14px] text-gray-500 outline-none" />
+                                                    <a href="#" className="text-[12px] text-[#1890ff] absolute -bottom-6 left-0 hover:underline">What is CVV2?</a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                {/* Right Column */}
+                                <div className="lg:col-span-5">
+                                    <div className="bg-[#f0f0f0] rounded-md p-8 shadow-sm">
+                                        <h2 className="text-[22px] font-light text-gray-600 mb-8">Selected Plan</h2>
+                                        
+                                        <div className="flex justify-between items-start mb-12">
+                                            <div className="flex gap-3 pr-4">
+                                                <div className="mt-1 w-[15px] h-[15px] rounded-full border-[4px] border-gray-500 bg-white flex-shrink-0 relative">
+                                                    <div className="absolute inset-0 m-auto w-1 h-1 bg-gray-500 rounded-full"></div>
+                                                </div>
+                                                <div className="text-[14px] text-gray-500 font-medium">
+                                                    STEP 1 QBank + Readydecks + Library 90-Days + Form 1 (2-weeks)
+                                                </div>
+                                            </div>
+                                            <div className="text-[14px] text-gray-600"><span className="text-[9px] align-top font-medium">$</span>459</div>
+                                        </div>
+
+                                        <h2 className="text-[22px] font-light text-gray-600 mb-6">Summary <span className="text-[16px]">(USD)</span></h2>
+                                        
+                                        <div className="space-y-4 text-[13px] text-gray-500 mb-8">
+                                            <div className="flex justify-between">
+                                                <span>Total Before Tax</span>
+                                                <span><span className="text-[9px] align-top font-medium mr-0.5">$</span>459.00</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>Estimated Tax</span>
+                                                <span><span className="text-[9px] align-top font-medium mr-0.5">$</span>0</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="border-t border-gray-300 pt-6 flex justify-between items-end mb-16">
+                                            <span className="text-[18px] text-gray-600">Order Total</span>
+                                            <span className="text-[26px] font-medium text-gray-700 leading-none">
+                                                <span className="text-[13px] align-top font-normal mr-0.5">$</span>459.00
+                                            </span>
+                                        </div>
+
+                                        <div className="text-center">
+                                            <span className="text-[10px] text-gray-400">You may owe use/sales tax in your state</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </main>
+                        </div>
+                    );
+                }
+
+                return (
+                    <div className="min-h-screen bg-gray-50 pb-20">
+                        <Controls activeProduct={activeProduct} setActiveProduct={setActiveProduct} viewMode={viewMode} setViewMode={setViewMode} productData={productData} />
+                        <div className="max-w-[1200px] mx-auto py-24 px-6 text-center">
+                            <h2 className="text-2xl font-bold text-gray-400 mb-2">Competitor View Not Available</h2>
+                            <p className="text-gray-500">We currently only have mockups mapped for MCAT (TPR), LSAT (Blueprint), USMLE (Competitor), SAT (Competitor), and GMAT (TPR).<br/>Please select one of those products to view the competitor state.</p>
+                        </div>
                     </div>
                 );
             }
@@ -369,7 +1046,8 @@
                         {[
                             { id: 'kaptest', label: 'Kaptest (Legacy)' },
                             { id: 'alphaCombined', label: 'Alpha (Combined)' },
-                            { id: 'alphaSplit', label: 'Alpha (Split S&H)' }
+                            { id: 'alphaSplit', label: 'Alpha (Split S&H)' },
+                            { id: 'competitor', label: 'Competitor' }
                         ].map(m => (
                             <button key={m.id} onClick={() => setViewMode(m.id)} className={`px-6 py-2 rounded-md font-bold text-[10px] uppercase transition-all ${viewMode === m.id ? 'bg-white text-indigo-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
                                 {m.label}
