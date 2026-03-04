@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout Evolution: Legacy to Future State</title>
+    <title>Shipping and Handling Evolution: Legacy to Future State</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -901,7 +901,7 @@
                     
                     <div className="max-w-[1600px] mx-auto bg-gray-50 p-12 rounded-2xl shadow-sm border border-gray-200">
                         <div className="flex justify-between items-center mb-10">
-                            <h1 className="text-[27px] font-bold text-slate-900">Checkout</h1>
+                            <h1 className="text-[27px] font-bold text-slate-900">Shipping and Handling</h1>
                             <div className="px-4 py-1 rounded bg-indigo-50 border border-indigo-100">
                                 <span className="text-[11px] font-bold text-indigo-700 uppercase tracking-widest">
                                     {viewMode === 'alphaCombined' ? 'AlphaCart (modified current state)' : 'AlphaCart (recommended future state)'}
@@ -948,7 +948,7 @@
                                                     {viewMode === 'alphaSplit' && (
                                                         <div className="flex justify-between text-[12.5px] text-slate-500 mt-1">
                                                             <span>Handling Fee</span>
-                                                            <span>${opt.handling.toFixed(2)}</span>
+                                                            <span>+ ${opt.handling.toFixed(2)}</span>
                                                         </div>
                                                     )}
                                                 </div>
@@ -1037,7 +1037,7 @@
                     <div className="relative z-10">
                         <h1 className="text-3xl font-black mb-3 tracking-tight">Shipping and Handling Evolution Strategy</h1>
                         <p className="text-slate-300 max-w-4xl text-[15px] leading-relaxed mb-8">
-                            This interactive tool visualizes the proposed evolution of our Shipping and Handling experience. Compare our current legacy flow against intermediate modifications, our recommended future state, and key competitor experiences to understand the strategic direction for each product line.
+                            This interactive tool visualizes the proposed evolution of our shipping and handling experience. Compare our current legacy flow against intermediate modifications, our recommended future state, and key competitor experiences to understand the strategic direction for each product line.
                         </p>
                         
                         <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-[13px] font-bold uppercase tracking-widest text-slate-200">
