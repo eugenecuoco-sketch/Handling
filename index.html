@@ -904,7 +904,7 @@
                             <h1 className="text-[27px] font-bold text-slate-900">Checkout</h1>
                             <div className="px-4 py-1 rounded bg-indigo-50 border border-indigo-100">
                                 <span className="text-[11px] font-bold text-indigo-700 uppercase tracking-widest">
-                                    {viewMode === 'alphaCombined' ? 'Alpha: Transition State' : 'Alpha: Proposed Future State'}
+                                    {viewMode === 'alphaCombined' ? 'AlphaCart (modified current state)' : 'AlphaCart (recommended future state)'}
                                 </span>
                             </div>
                         </div>
@@ -1030,26 +1030,63 @@
         };
 
         const Controls = ({ activeProduct, setActiveProduct, viewMode, setViewMode, productData }) => (
-            <div className="max-w-[1600px] mx-auto mb-10 space-y-4 no-print px-4">
-                <div className="flex flex-wrap items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                    <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest mr-2">Step 1: Select Product</span>
-                    <div className="flex gap-2">
+            <div className="max-w-[1600px] mx-auto mb-10 mt-6 space-y-6 no-print px-4">
+                
+                {/* Introduction Header Block */}
+                <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-8 md:p-10 rounded-2xl shadow-lg relative overflow-hidden">
+                    <div className="relative z-10">
+                        <h1 className="text-3xl font-black mb-3 tracking-tight">Checkout Evolution Strategy</h1>
+                        <p className="text-slate-300 max-w-4xl text-[15px] leading-relaxed mb-8">
+                            This interactive tool visualizes the proposed evolution of our checkout experience. Compare our current legacy flow against intermediate modifications, our recommended future state, and key competitor experiences to understand the strategic direction for each product line.
+                        </p>
+                        
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-[13px] font-bold uppercase tracking-widest text-slate-200">
+                            <div className="flex items-center gap-3">
+                                <div className="w-6 h-6 rounded-full bg-indigo-500 text-white flex items-center justify-center">1</div>
+                                <span>Select a Product</span>
+                            </div>
+                            <svg className="hidden sm:block w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            <svg className="block sm:hidden w-5 h-5 text-slate-500 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                            <div className="flex items-center gap-3">
+                                <div className="w-6 h-6 rounded-full bg-indigo-500 text-white flex items-center justify-center">2</div>
+                                <span>Choose a State</span>
+                            </div>
+                            <svg className="hidden sm:block w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            <svg className="block sm:hidden w-5 h-5 text-slate-500 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                            <div className="flex items-center gap-3">
+                                <div className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center">
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <span className="text-emerald-400">Review Changes Below</span>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Decorative element */}
+                    <div className="absolute -right-20 -top-20 w-80 h-80 bg-white opacity-5 rounded-full blur-3xl"></div>
+                </div>
+
+                {/* Interactive Controls Bar */}
+                <div className="flex flex-col lg:flex-row lg:items-center gap-6 bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                    
+                    <div className="flex flex-wrap items-center gap-2">
                         {Object.keys(productData).map(prod => (
-                            <button key={prod} onClick={() => setActiveProduct(prod)} className={`px-5 py-2 rounded-lg font-bold transition-all text-xs ${activeProduct === prod ? 'bg-indigo-900 text-white shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                            <button key={prod} onClick={() => setActiveProduct(prod)} className={`px-6 py-2.5 rounded-lg font-bold transition-all text-[13px] ${activeProduct === prod ? 'bg-indigo-900 text-white shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
                                 {prod}
                             </button>
                         ))}
                     </div>
-                    <div className="h-8 w-px bg-slate-200 mx-4"></div>
-                    <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest mr-2">Step 2: Choose State</span>
-                    <div className="flex bg-slate-100 p-1 rounded-lg">
+                    
+                    <div className="hidden lg:block h-10 w-px bg-slate-200 mx-2"></div>
+                    <div className="block lg:hidden w-full h-px bg-slate-200 my-1"></div>
+                    
+                    <div className="flex flex-wrap gap-2">
                         {[
-                            { id: 'kaptest', label: 'Kaptest (Legacy)' },
-                            { id: 'alphaCombined', label: 'Alpha (Combined)' },
-                            { id: 'alphaSplit', label: 'Alpha (Split S&H)' },
+                            { id: 'kaptest', label: 'KapTest (current state)' },
+                            { id: 'alphaCombined', label: 'AlphaCart (modified current state)' },
+                            { id: 'alphaSplit', label: 'AlphaCart (recommended future state)' },
                             { id: 'competitor', label: 'Competitor' }
                         ].map(m => (
-                            <button key={m.id} onClick={() => setViewMode(m.id)} className={`px-6 py-2 rounded-md font-bold text-[10px] uppercase transition-all ${viewMode === m.id ? 'bg-white text-indigo-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
+                            <button key={m.id} onClick={() => setViewMode(m.id)} className={`px-5 py-2.5 rounded-lg font-bold text-[12px] transition-all border ${viewMode === m.id ? 'bg-indigo-50 border-indigo-200 text-indigo-900 shadow-sm' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}>
                                 {m.label}
                             </button>
                         ))}
