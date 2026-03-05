@@ -27,7 +27,7 @@
         const App = () => {
             const [activeProduct, setActiveProduct] = useState('MCAT');
             const [shippingMethodId, setShippingMethodId] = useState('ground');
-            const [viewMode, setViewMode] = useState('alphaSplit'); // 'kaptest', 'alphaCombined', 'alphaSplit', 'competitor'
+            const [viewMode, setViewMode] = useState('alphaHover'); // 'kaptest', 'alphaCombined', 'alphaSplit', 'alphaHover', 'competitor'
             const [agreed, setAgreed] = useState(true);
             const [tprPaymentMode, setTprPaymentMode] = useState('full');
             const [satShipping, setSatShipping] = useState(22.09);
@@ -884,7 +884,7 @@
                 );
             }
 
-            // Alpha Layout (Combined or Split)
+            // Alpha Layout (Combined, Split, or Hover)
             const subtotal = data.alphaItems.reduce((acc, i) => acc + i.price, 0);
             const shippingOptions = [
                 { id: 'ground', label: 'Ground', total: data.alphaShipping.ground, handling: 11.37 },
@@ -904,7 +904,9 @@
                             <h1 className="text-[27px] font-bold text-slate-900">Shipping and Handling</h1>
                             <div className="px-4 py-1 rounded bg-indigo-50 border border-indigo-100">
                                 <span className="text-[11px] font-bold text-indigo-700 uppercase tracking-widest">
-                                    {viewMode === 'alphaCombined' ? 'AlphaCart (modified current state)' : 'AlphaCart (recommended future state)'}
+                                    {viewMode === 'alphaCombined' ? 'AlphaCart (Current State)' : 
+                                     viewMode === 'alphaSplit' ? 'AlphaCart (Future State 1)' : 
+                                     'AlphaCart (Future State 2)'}
                                 </span>
                             </div>
                         </div>
@@ -939,11 +941,24 @@
                                                     </div>
                                                 </div>
                                                 <div className="ml-6 flex-grow">
-                                                    <div className="flex justify-between items-center">
+                                                    <div className="flex justify-between items-center w-full">
                                                         <span className="text-[15.5px] font-bold">{opt.label}</span>
-                                                        <span className="text-[15.5px] font-bold text-slate-900">
-                                                            ${viewMode === 'alphaSplit' ? (opt.total - opt.handling).toFixed(2) : opt.total.toFixed(2)}
-                                                        </span>
+                                                        <div className="flex items-center gap-2">
+                                                            {viewMode === 'alphaHover' && (
+                                                                <div className="relative group flex items-center justify-center cursor-help">
+                                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#FEF08A" stroke="#D97706" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                                                    </svg>
+                                                                    <div className="absolute top-full mt-1 right-0 hidden group-hover:block w-max bg-white border border-gray-400 text-gray-800 text-[12px] px-2 py-1 shadow-md z-10 font-normal pointer-events-none">
+                                                                        ${(opt.total - opt.handling).toFixed(2)} shipping, ${opt.handling.toFixed(2)} Handling
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                            <span className="text-[15.5px] font-bold text-slate-900">
+                                                                ${viewMode === 'alphaSplit' ? (opt.total - opt.handling).toFixed(2) : opt.total.toFixed(2)}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                     {viewMode === 'alphaSplit' && (
                                                         <div className="flex justify-between text-[12.5px] text-slate-500 mt-1">
@@ -1081,9 +1096,10 @@
                     
                     <div className="flex flex-wrap gap-2">
                         {[
-                            { id: 'kaptest', label: 'KapTest (current state)' },
-                            { id: 'alphaCombined', label: 'AlphaCart (modified current state)' },
-                            { id: 'alphaSplit', label: 'AlphaCart (recommended future state)' },
+                            { id: 'kaptest', label: 'Kaptest (Current State)' },
+                            { id: 'alphaCombined', label: 'AlphaCart (Current State)' },
+                            { id: 'alphaSplit', label: 'AlphaCart (Future State 1)' },
+                            { id: 'alphaHover', label: 'AlphaCart (Future State 2)' },
                             { id: 'competitor', label: 'Competitor' }
                         ].map(m => (
                             <button key={m.id} onClick={() => setViewMode(m.id)} className={`px-5 py-2.5 rounded-lg font-bold text-[12px] transition-all border ${viewMode === m.id ? 'bg-indigo-50 border-indigo-200 text-indigo-900 shadow-sm' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}>
